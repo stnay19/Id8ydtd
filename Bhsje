@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>محول العملات</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+    body {
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      direction: rtl;
+    }
+    .container {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.4);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #fcd34d;
+    }
+    select, input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+    }
+    input {
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    select {
+      background-color: #e2e8f0;
+      color: #1e293b;
+    }
+    button {
+      background-color: #facc15;
+      color: #1e293b;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #f59e0b;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.3rem;
+      color: #38bdf8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>محول العملات</h2>
+    <input type="number" id="amount" placeholder="أدخل المبلغ" />
+    
+    <select id="fromCurrency">
+      <option value="USD">دولار أمريكي</option>
+      <option value="EUR">يورو</option>
+      <option value="SAR">ريال سعودي</option>
+      <option value="IQD">دينار عراقي</option>
+    </select>
+    
+    <select id="toCurrency">
+      <option value="IQD">دينار عراقي</option>
+      <option value="USD">دولار أمريكي</option>
+      <option value="EUR">يورو</option>
+      <option value="SAR">ريال سعودي</option>
+    </select>
+
+    <button onclick="convert()">تحويل</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    // أسعار تحويل ثابتة كمثال (يمكنك ربطها لاحقاً بـ API خارجي)
+    const exchangeRates = {
+      USD: { EUR: 0.92, SAR: 3.75, IQD: 1310 },
+      EUR: { USD: 1.09, SAR: 4.07, IQD: 1430 },
+      SAR: { USD: 0.27, EUR: 0.25, IQD: 350 },
+      IQD: { USD: 0.00076, EUR: 0.00070, SAR: 0.0029 }
+    };
+
+    function convert() {
+      const amount = parseFloat(document.getElementById("amount").value);
+      const from = document.getElementById("fromCurrency").value;
+      const to = document.getElementById("toCurrency").value;
+      const resultDiv = document.getElementById("result");
+
+      if (isNaN(amount) || amount <= 0) {
+        resultDiv.textContent = "الرجاء إدخال مبلغ صالح.";
+        return;
+      }
+
+      if (from === to) {
+        resultDiv.textContent = `${amount.toFixed(2)} ${to}`;
+        return;
+      }
+
+      const rate = exchangeRates[from][to];
+      const converted = amount * rate;
+
+      resultDiv.textContent = `${converted.toFixed(2)} ${to}`;
+    }
+  </script>
+
+</body>
+</html>
